@@ -1,0 +1,15 @@
+language: cpp
+before_script:
+- sudo apt-get install libboost-test-dev -y
+- echo "deb http://archive.ubuntu.com/ubuntu xenial main universe" | sudo tee -a /etc/apt/sources.list
+- sudo apt-get update -qq
+script:
+- cmake .
+- cmake --build .
+- cmake --build . --target test
+- cmake --build . --target package
+deploy:
+  provider: script
+  skip_cleanup: true
+  script:
+  - curl -T <FILE.deb> -ubds1984:d09c67e0bb9aca358e93c14f7cb3c56833f453f2 "https://api.bintray.com/content/bds1984/lesson1/$TRAVIS_BUILD_NUMBER/helloworld-0.0.$TRAVIS_BUILD_NUMBERLinux.deb;deb_distribution=trusty;deb_component=main;deb_architecture=amd64;publish=1"
